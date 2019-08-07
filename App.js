@@ -1,114 +1,78 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React from "react";
+import { StyleSheet, View, Text, Button } from "react-native";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
-import React, {Fragment} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const App = () => {
-  return (
-    <Fragment>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </Fragment>
+const HomeScreen = ({navigation}) => {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>Home Screen</Text>
+        <Button
+          title="Go to Details"
+          onPress={() => navigation.navigate('Details')}
+        /><Button
+        title="Go to Modal"
+        onPress={() => navigation.navigate('Modal')}
+      />
+      </View>
+    );
+}
+const DetailsScreen = ({navigation}) => {
+      return (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <Text>Details Screen</Text>
+          <Button
+          title="Go to Home"
+          onPress={() => navigation.navigate('Home')}
+        />
+        <Button
+          title="Go to Other"
+          onPress={() => navigation.navigate('Other')}
+        />
+        </View>
+      );
+  }
+  const OtherScreen  = ({navigation}) => {
+      return (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <Text>Other Screen</Text>
+          <Button
+          title="Go to Detail"
+          onPress={() => navigation.navigate('Details')}
+        />
+        </View>
+      );
+  }
+  const ModalScreen  = ({navigation}) => {
+      return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ fontSize: 30 }}>This is a modal!</Text>
+          <Button
+            onPress={() => navigation.goBack()}
+            title="Dismiss"
+          />
+        </View>
+      );
+  }
+const AppNavigator = createStackNavigator(
+    {
+      Home: HomeScreen,
+      Details: DetailsScreen,
+      Other: OtherScreen
+    },
+    {
+      initialRouteName: "Home"
+    }
   );
-};
+  const ModalNavigator = createStackNavigator(
+    {
+      Home: AppNavigator,
+      Modal: ModalScreen,
+    },
+    {
+        mode: 'modal',
+        headerMode: 'none',
+    }
+  );
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
-
-export default App;
+// export default createAppContainer(AppNavigator);
+export default createAppContainer(ModalNavigator);
